@@ -55,7 +55,7 @@ def countParams(model):
     for name, layer in model.named_modules():
         try:
             num = torch.sum(layer.weight.data.abs() > 0).item()
-            totalnum += num  
+            totalnum += num
         except:
             pass
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     plt.figure(figsize=(12, 4))
     for i in range(len(fullfs_im)):
-        
+
         img = torch.tensor(imageio.imread(fullfs_im[i]), dtype=torch.float32)/255.0
         lab = torch.tensor(imageio.imread(fullfs_gt[i]), dtype=torch.float32)/255.0
 
@@ -140,24 +140,23 @@ if __name__ == '__main__':
         dice_score += multiclass_dice_coeff(mask_pred[:, 1:], lab[:, 1:], reduce_batch_first=False)
 
 
-        plt.subplot(1, 3, 1)
-        plt.imshow(img.squeeze().permute(1, 2, 0).detach().cpu().numpy())
-        plt.title("img")
+        # plt.subplot(1, 3, 1)
+        # plt.imshow(img.squeeze().permute(1, 2, 0).detach().cpu().numpy())
+        # plt.title("img")
+        #
+        # plt.subplot(1, 3, 2)
+        # plt.imshow(showgt.detach().cpu().numpy())
+        # plt.title("Groundtruth")
+        #
+        # plt.subplot(1, 3, 3)
+        # plt.imshow(showmask.detach().cpu().numpy())
+        # plt.title("Binary Mask")
 
-        plt.subplot(1, 3, 2)
-        plt.imshow(showgt.detach().cpu().numpy())
-        plt.title("Groundtruth")
-
-        plt.subplot(1, 3, 3)
-        plt.imshow(showmask.detach().cpu().numpy())
-        plt.title("Binary Mask")
+        plt.imsave("output/result_" + str(i) + "_0.png", img.squeeze().permute(1, 2, 0).detach().cpu().numpy())
+        plt.imsave("output/result_" + str(i) + "_1.png", showgt.detach().cpu().numpy())
+        plt.imsave("output/result_" + str(i) + "_2.png", showmask.detach().cpu().numpy())
 
         plt.pause(0.1)
 
 
     print("average Dice Score:", dice_score.item()/len(fullfs_im))
-
-
-
-   
-
